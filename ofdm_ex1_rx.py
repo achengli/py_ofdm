@@ -52,14 +52,12 @@ plt.xlabel("Sample index")
 plt.ylabel("Cross correlation @ nIFFT")
 plt.plot(cc)
 plt.axvline(x=offset,color='g')
-plt.show()
 
 plt.figure()
 plt.title("Sum of the square of the imaginary parts of the pilots")
 plt.xlabel("Relative sample index")
 plt.ylabel("Sum(imag(pilots)^2)")
 plt.plot(np.arange(-searchRangeForPilotPeak,searchRangeForPilotPeak),sumofimag)
-plt.show()
 print("Symbol start sample index =",offset)
 
 ofdm.initDecode(complex_signal,offset)
@@ -76,11 +74,10 @@ rx_im = rx_byte[0:Npixels].reshape(tx_im.size[1],tx_im.size[0])
 plt.figure()
 plt.title("Decoded image")
 plt.imshow(rx_im, cmap='gray')
-plt.show()
 
 tx_bin = np.unpackbits(tx_byte.flatten())
 rx_bin = np.unpackbits(rx_byte[0:Npixels])
 ber = (rx_bin ^ tx_bin).sum()/tx_bin.size
 print('ber= ', ber)
 
-
+plt.show()
