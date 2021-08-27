@@ -21,7 +21,7 @@
 import numpy as np
 import scipy.io.wavfile as wav
 import matplotlib.pyplot as plt
-import ofdm_codec
+import pyofdm.codec
 from PIL import Image
 
 # expected image for size and ber determination
@@ -32,7 +32,7 @@ Npixels = tx_im.size[1]*tx_im.size[0]
 # let's initiate the OFDM codec
 sym_slots, QAMorder = 48, 2
 nbytes = sym_slots*QAMorder//8
-ofdm = ofdm_codec.OFDM(pilotAmplitude = 1, nData=nbytes, mQAM=QAMorder)
+ofdm = pyofdm.codec.OFDM(pilotAmplitude = 1, nData=nbytes, mQAM=QAMorder)
 
 # OFDM reception as audio file
 samp_rate, base_signal = wav.read('ofdm44100.wav')

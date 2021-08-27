@@ -21,7 +21,7 @@
 from PIL import Image
 import numpy as np
 import scipy.io.wavfile as wav
-import ofdm_codec
+import pyofdm.codec
 
 # load the image
 tx_im = Image.open('DC4_300x200.pgm')
@@ -30,7 +30,7 @@ tx_enc = np.array(tx_im, dtype="uint8").flatten()
 
 sym_slots, QAMorder = 48, 2
 nbytes = sym_slots*QAMorder//8
-ofdm = ofdm_codec.OFDM(pilotAmplitude = 1, nData=nbytes, mQAM=QAMorder)
+ofdm = pyofdm.codec.OFDM(pilotAmplitude = 1, nData=nbytes, mQAM=QAMorder)
 # add zeros to make data a whole number of symbols
 tx_enc = np.append(tx_enc,np.zeros((sym_slots-tx_enc.size)%sym_slots, dtype="uint8"))
 
