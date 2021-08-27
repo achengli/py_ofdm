@@ -22,6 +22,7 @@ import numpy as np
 import scipy.io.wavfile as wav
 import matplotlib.pyplot as plt
 import pyofdm.codec
+import pyofdm.nyquistmodem
 from PIL import Image
 
 # expected image for size and ber determination
@@ -38,7 +39,7 @@ ofdm = pyofdm.codec.OFDM(pilotAmplitude = 1, nData=nbytes, mQAM=QAMorder)
 samp_rate, base_signal = wav.read('ofdm44100.wav')
 # append extra zeros so that the search algorithm is happy
 base_signal = np.append(base_signal,np.zeros(ofdm.nIFFT*2))
-complex_signal = ofdm.nyquistdemod(base_signal)
+complex_signal = pyofdm.nyquistmodem.demod(base_signal)
 
 print("sample rate=",samp_rate)
 

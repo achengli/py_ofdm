@@ -22,6 +22,7 @@ from PIL import Image
 import numpy as np
 import scipy.io.wavfile as wav
 import pyofdm.codec
+import pyofdm.nyquistmodem
 
 # load the image
 tx_im = Image.open('DC4_300x200.pgm')
@@ -40,6 +41,6 @@ complex_signal = np.zeros(np.random.randint(low=1*ofdm.nIFFT,high=2*ofdm.nIFFT),
 for i in range(0,tx_enc.size,nbytes):
     complex_signal = np.append(complex_signal,ofdm.encode(tx_enc[i:i+nbytes])) 
 
-base_signal = ofdm.nyquistmod(complex_signal)
+base_signal = pyofdm.nyquistmodem.mod(complex_signal)
 # save it as a wav file
 wav.write('ofdm44100.wav',44100,base_signal)

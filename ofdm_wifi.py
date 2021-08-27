@@ -19,9 +19,9 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-import ofdm_codec
+import pyofdm.codec
 
-ofdm = ofdm_codec.OFDM(pilotAmplitude = 1,nData=12,mQAM=2)
+ofdm = pyofdm.codec.OFDM(pilotAmplitude = 1,nData=12,mQAM=2)
 signal = np.empty(0)
 
 row = np.random.randint(256,size=12,dtype='uint8')
