@@ -14,7 +14,7 @@ pip3 install komm
 
 The package `pyofdm` contains the module `codec` which contains the class `OFDM`.
 
-### Constructor: `OFDM(nFreqSamples=64, pilotIndices=[-21, -7, 7, 21], pilotAmplitude=1, nData=12, fracCyclic=0.25, mQAM=2)`
+### `OFDM(nFreqSamples=64, pilotIndices=[-21, -7, 7, 21], pilotAmplitude=1, nData=12, fracCyclic=0.25, mQAM=2)`
 
      OFDM encoder and decoder. The data is encoded as QAM using the komm package. 
      Energy dispersal is done with a pre-seeded random number generator. Both pilot 
@@ -85,37 +85,40 @@ A grey value image is transmitted encoded as OFDM.
 
 ### Transmission
 
-Run `ofdm_ex1_tx.py`. This creates a wav file with the whole
-image as OFDM encoded. You can listen to it!
+`ofdm_ex1_tx.py` reads in the pgm image 'DC4_300x200.pgm' and saves
+OFDM baseband to a WAV file 'ofdm44100.wav' You can listen to it!
 
 ### Reception
 
-Run `ofdm_ex1_rx.py`. This then detects the start of the 1st symbol
-1st with the cyclic prefix and then fine tunes it with the pilots.
-Then it decodes the image.
+`ofdm_ex1_rx.py` reads in OFDM baseband from the WAV file
+'ofdm44100.wav'. This then detects the start of the 1st symbol 1st
+with the cyclic prefix and then fine tunes it with the pilots. Then
+it decodes the image.
 
-### What's new
 
-- QAM modulation and demodulation is now performed using Roberto Nobrega komm library [pypi.org.project/komm](https://pypi.org.project/komm) which allows the modulation order to be extended to square modulations beyond QPSK/4QAM
+## Wifi demo
 
-- pilots can be inserted at any user selected indices and not just regularly spaced. DC subcarrier is unmodulated by default.
+The WIFI demo corresponds to 802.11a standard,
+[rfmw.em.keysight.com//wireless/helpfiles/89600b/webhelp/subsystems/wlan-ofdm/Content/ofdm_basicprinciplesoverview.htm](https://rfmw.em.keysight.com//wireless/helpfiles/89600b/webhelp/subsystems/wlan-ofdm/Content/ofdm_basicprinciplesoverview.htm)
+with 48 data carriers and 4 pilot tones. In practice the carrier
+separation is 312.5kHz
 
-- default example corresponds to 802.11a standard, [rfmw.em.keysight.com//wireless/helpfiles/89600b/webhelp/subsystems/wlan-ofdm/Content/ofdm_basicprinciplesoverview.htm](https://rfmw.em.keysight.com//wireless/helpfiles/89600b/webhelp/subsystems/wlan-ofdm/Content/ofdm_basicprinciplesoverview.htm) with 48 data carriers and 4 pilot tones. In practice the carrier separation is 312.5kHz
+`ofdm_wifi.py` generates one random symbol and shows
+the absolute value of the signal, the real and imaginary parts of the
+ofdm spectrum, the cross-correction value @nIFFT, the sum of the
+squares of the imaginary part of the pilots, and compares output bytes
+to input bytes.
 
-- encode() and decode() operate with a complex signal, suitable for quadrature modulation of a carrier. nyquistmod() and nyquistdemod() convert between a complex signal and a double-sampled real signal for basedband modulation.
 
-- crosscorrelation now finds just the cross-correlation value at a fixed sample (nIFFT) for a sliding window of width nCyclic
+## Features
 
-- imPilots now returns the sum of the squares of the imaginary part of the pilots
+- QAM modulation and demodulation is performed using Roberto Nobrega komm library [pypi.org.project/komm](https://pypi.org.project/komm) which allows the modulation order to be extended to square modulations beyond QPSK/4QAM.
 
-- rewritten examples:
+- Pilots can be inserted at any user selected indices and not just regularly spaced. DC subcarrier is unmodulated by default.
 
-1. `ofdm_wifi.py`
-self contained, generates one random symbol and shows the absolute value of the signal, the real and imaginary parts of the ofdm spectrum, the cross-correction value @nIFFT, the sum of the squares of the imaginary part of the pilots, and compares output bytes to input bytes.
+- The methods `encode()` and `decode()` operate with a complex signal, suitable for quadrature modulation of a carrier. The `nyquistmodem`
+module converts between a complex signal and a double-sampled real signal for basedband modulation.
 
-2. `ofdm_ex1_tx.py`
-reads in a pgm image 'DC4_300x200.pgm' and saves ofdm baseband to a WAV file 'ofdm44100.wav'
+- `crosscorrelation` now finds just the cross-correlation value at a fixed sample (nIFFT) for a sliding window of width nCyclic
 
-3. `ofdm_ex1_rx.py`
-reads in ofdm baseband from a WAV file 'ofdm44100.wav', displays image and reports bit error ratio (ber).
-
+- `imPilots` now returns the sum of the squares of the imaginary part of the pilots

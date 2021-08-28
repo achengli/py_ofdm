@@ -31,7 +31,6 @@ signal = np.append(signal,ofdm.encode(row))
 plt.figure()
 plt.title("Symbol")
 plt.plot(np.abs(signal))
-plt.show()
 
 # Show negative frequency components as negative, rather than upper half
 myfreqs = (np.arange(ofdm.nIFFT)+ofdm.nIFFT//2)%ofdm.nIFFT-ofdm.nIFFT//2
@@ -42,7 +41,6 @@ axs[0].set_title("Re")
 axs[1].bar(myfreqs,ofdm.spectrum.imag)
 axs[1].axhline()
 axs[1].set_title("Im")
-plt.show()
 
 #######################################################################
 # reception
@@ -66,16 +64,15 @@ plt.xlabel("Sample index")
 plt.ylabel("Cross correlation @ nIFFT")
 plt.plot(cc)
 plt.axvline(x=offset,color='g')
-plt.show()
 
 plt.figure()
 plt.title("Sum of the square of the imaginary parts of the pilots")
 plt.xlabel("Relative sample index")
 plt.ylabel("Sum(imag(pilots)^2)")
 plt.plot(np.arange(-searchRangeForPilotPeak,searchRangeForPilotPeak),sumofimag)
-plt.show()
 
 ofdm.initDecode(signal,offset)
 
 rx_enc = ofdm.decode()[0]
 print(rx_enc)
+plt.show()
