@@ -23,6 +23,8 @@ import numpy as np
 import scipy.io.wavfile as wav
 import pyofdm.codec
 import pyofdm.nyquistmodem
+import matplotlib.pyplot as plt
+import numpy as np
 
 # load the image
 tx_im = Image.open('DC4_300x200.pgm')
@@ -41,6 +43,18 @@ complex_signal = np.zeros(np.random.randint(low=1*ofdm.nIFFT,high=2*ofdm.nIFFT),
 for i in range(0,tx_enc.size,nbytes):
     complex_signal = np.append(complex_signal,ofdm.encode(tx_enc[i:i+nbytes])) 
 
+plt.title("OFDM complex spectrum")
+plt.xlabel("Normalised frequencies")
+plt.ylabel("Frequency amplitudes")
+plt.plot(np.linspace(0,1,len(complex_signal)),(1/len(complex_signal))*np.abs(np.fft.fft(complex_signal)))
+
 base_signal = pyofdm.nyquistmodem.mod(complex_signal)
 # save it as a wav file
 wav.write('ofdm44100.wav',44100,base_signal)
+
+plt.figure()
+plt.title("OFDM baseband spectrum after Nyquist modulation")
+plt.xlabel("Normalised frequencies")
+plt.ylabel("Frequency amplitudes")
+plt.plot(np.linspace(0,1,len(base_signal)),(1/len(base_signal))*np.abs(np.fft.fft(base_signal)))
+plt.show()
