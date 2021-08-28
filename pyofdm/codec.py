@@ -37,7 +37,9 @@ class OFDM:
     pilots.
     """
     def __init__(self, nFreqSamples = 64, pilotIndices = [-21, -7, 7, 21], 
-                 pilotAmplitude = 1, nData = 12, fracCyclic = 0.25, mQAM = 2):
+                 pilotAmplitude = 1, nData = 12, fracCyclic = 0.25, mQAM = 2,
+                 pilotDistance = None
+    ):
         """
         nFreqSamples sets the number of frequency coefficients of the FFT. Pilot 
         tones are injected at pilotIndices. The real valued pilot amplitude is 
@@ -55,6 +57,7 @@ class OFDM:
 
         # fracCyclic is relative cyclic prefix/ guard interval length
         self.nCyclic = int(self.nIFFT * fracCyclic)
+        print(self.nCyclic)
 
         # indices of pilots	
         self.pilotIndices = np.array(pilotIndices)
@@ -76,6 +79,10 @@ class OFDM:
         self.qam = komm.QAModulation(2**self.mQAM,base_amplitudes=1./self.norm)
         
         self.kstart = (8*self.nData//self.mQAM+self.pilotIndices.size)//2
+
+        # overrides the list
+        if pilotDistance:
+            self.pilotIndices = np.arange(-self.kstart,self.kstart,pilotDistance)
         
     def encode(self,data,randomSeed = 1):
         """

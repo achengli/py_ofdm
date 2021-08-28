@@ -30,10 +30,30 @@ tx_im = Image.open('DC4_300x200.pgm')
 tx_byte = np.array(tx_im, dtype='uint8')
 Npixels = tx_im.size[1]*tx_im.size[0]
 
-# let's initiate the OFDM codec
-sym_slots, QAMorder = 48, 2
+
+# We do DVB-T 2k
+# https://www.etsi.org/deliver/etsi_en/300700_300799/300744/01.06.01_60/en_300744v010601p.pdf
+
+# Number of total frequency camples
+totalFreqSamples = 2048
+
+# Number of useful data carriers / frequency samples
+sym_slots = 1512
+
+# QAM Order 
+QAMorder = 2
+
+# Total number of bytes per OFDM symbol
 nbytes = sym_slots*QAMorder//8
-ofdm = pyofdm.codec.OFDM(pilotAmplitude = 1, nData=nbytes, mQAM=QAMorder)
+
+# Distance of the evenly spaced pilots
+distanceOfPilots = 12
+
+ofdm = pyofdm.codec.OFDM(pilotAmplitude = 2,
+                         nData=nbytes,
+                         mQAM = QAMorder,
+                         nFreqSamples = totalFreqSamples,
+                         pilotDistance = distanceOfPilots)
 
 # OFDM reception as audio file
 samp_rate, base_signal = wav.read('ofdm44100.wav')
