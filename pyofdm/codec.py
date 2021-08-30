@@ -55,7 +55,6 @@ class OFDM:
 
         # fracCyclic is relative cyclic prefix/ guard interval length
         self.nCyclic = int(self.nIFFT * fracCyclic)
-        print(self.nCyclic)
 
         # indices of pilots	
         self.pilotIndices = np.array(pilotIndices)
