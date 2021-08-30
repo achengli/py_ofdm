@@ -21,6 +21,7 @@
 import numpy as np
 import scipy.io.wavfile as wav
 import matplotlib.pyplot as plt
+import pyofdm.setpilotindex
 import pyofdm.codec
 import pyofdm.nyquistmodem
 from PIL import Image
@@ -48,12 +49,13 @@ nbytes = sym_slots*QAMorder//8
 
 # Distance of the evenly spaced pilots
 distanceOfPilots = 12
+pilotlist = pyofdm.setpilotindex.setpilotindex(nbytes,QAMorder,distanceOfPilots)
 
-ofdm = pyofdm.codec.OFDM(pilotAmplitude = 2,
+ofdm = pyofdm.codec.OFDM(pilotAmplitude = 16/9,
                          nData=nbytes,
+                         pilotIndices = pilotlist,
                          mQAM = QAMorder,
-                         nFreqSamples = totalFreqSamples,
-                         pilotDistance = distanceOfPilots)
+                         nFreqSamples = totalFreqSamples)
 
 # OFDM reception as audio file
 samp_rate, base_signal = wav.read('ofdm44100.wav')
@@ -86,9 +88,7 @@ sig_sym = (Npixels-1+nbytes)//nbytes
             
 rx_byte = np.empty(0, dtype='uint8')
 
-for i in range(sig_sym):
-    row = ofdm.decode()[0]
-    rx_byte = np.append(rx_byte, np.uint8(row))
+rx_byte = np.uint8([ofdm.decode()[0] for i in range(sig_sym)]).ravel()
 
 rx_im = rx_byte[0:Npixels].reshape(tx_im.size[1],tx_im.size[0])
 

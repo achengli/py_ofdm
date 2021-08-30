@@ -37,9 +37,7 @@ class OFDM:
     pilots.
     """
     def __init__(self, nFreqSamples = 64, pilotIndices = [-21, -7, 7, 21], 
-                 pilotAmplitude = 1, nData = 12, fracCyclic = 0.25, mQAM = 2,
-                 pilotDistance = None
-    ):
+                 pilotAmplitude = 1, nData = 12, fracCyclic = 0.25, mQAM = 2):
         """
         nFreqSamples sets the number of frequency coefficients of the FFT. Pilot 
         tones are injected at pilotIndices. The real valued pilot amplitude is 
@@ -80,11 +78,8 @@ class OFDM:
         
         self.kstart = (8*self.nData//self.mQAM+self.pilotIndices.size)//2
 
-        # overrides the list
-        if pilotDistance:
-            self.pilotIndices = np.arange(-self.kstart,self.kstart,pilotDistance)
-        
     def encode(self,data,randomSeed = 1):
+            
         """
         Creates an OFDM symbol using QAM. 
         The signal is a complex valued numpy array where the
@@ -159,7 +154,6 @@ class OFDM:
 
         # Perform an FFT to get the frequency samples which code our signal as QPSK pairs
         rx_freqs = np.fft.fft(rx_symbol)
-
         
         # sum of the square of the imaginary parts of the pilot tones
         imPilots = 0.0
@@ -201,7 +195,6 @@ class OFDM:
         self.rxindex = self.rxindex+self.nIFFT
 
         return rx_byte, imPilots
-
 
     def findSymbolStartIndex(self, signal, searchrangecoarse=None, searchrangefine = 25):
         """
