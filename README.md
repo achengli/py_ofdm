@@ -27,6 +27,7 @@ The package `pyofdm` contains the module `codec` which contains the class `OFDM`
      On the receiver side the start of the symbol is detected by first doing a 
      coarse search with the cyclic prefix and then a precision alignment with the 
      pilots.
+     [en.wikipedia.org/wiki/OFDM]
      
      nFreqSamples sets the number of frequency coefficients of the FFT. Pilot 
      tones are injected at pilotIndices. The real valued pilot amplitude is 
@@ -92,22 +93,23 @@ and choose the pilot spacing.
 
 A grey value image is transmitted encoded as OFDM.
 
-### Transmission
+### Transmission demo
 
-`ofdm_ex1_tx.py` reads in the pgm image 'DC4_300x200.pgm' and saves
+`ofdm_dvbt_tx.py` reads in the pgm image 'DC4_300x200.pgm' and saves
 OFDM baseband to a WAV file 'ofdm44100.wav' You can listen to it!
+Based on DVB-T 2k mode
+[www.etsi.org/deliver/etsi_en/300700_300799/300744/01.06.01_60/en_300744v010601p.pdf]
 
-### Reception
+### Reception demo
 
-`ofdm_ex1_rx.py` reads in OFDM baseband from the WAV file
+`ofdm_dvbt_rx.py` reads in OFDM baseband from the WAV file
 'ofdm44100.wav'. This then detects the start of the 1st symbol 1st
 with the cyclic prefix and then fine tunes it with the pilots. Then
 it decodes the image.
 
-
 ## Wifi demo
 
-The WIFI demo corresponds to 802.11a standard,
+The WIFI demo corresponds to 802.11a standard (default for pyofdm),
 [rfmw.em.keysight.com//wireless/helpfiles/89600b/webhelp/subsystems/wlan-ofdm/Content/ofdm_basicprinciplesoverview.htm](https://rfmw.em.keysight.com//wireless/helpfiles/89600b/webhelp/subsystems/wlan-ofdm/Content/ofdm_basicprinciplesoverview.htm)
 with 48 data carriers and 4 pilot tones. In practice the carrier
 separation is 312.5kHz
@@ -118,7 +120,6 @@ ofdm spectrum, the cross-correction value @nIFFT, the sum of the
 squares of the imaginary part of the pilots, and compares output bytes
 to input bytes.
 
-
 ## Features
 
 - QAM modulation and demodulation is performed using Roberto Nobrega komm library [pypi.org.project/komm](https://pypi.org.project/komm) which allows the modulation order to be extended to square modulations beyond QPSK/4QAM.
@@ -128,6 +129,6 @@ to input bytes.
 - The methods `encode()` and `decode()` operate with a complex signal, suitable for quadrature modulation of a carrier. The `nyquistmodem`
 module converts between a complex signal and a double-sampled real signal for basedband modulation.
 
-- `crosscorrelation` now finds just the cross-correlation value at a fixed sample (nIFFT) for a sliding window of width nCyclic
+- `crosscorrelation` finds the cross-correlation value at a fixed sample (nIFFT) for a sliding window of width nCyclic
 
-- `imPilots` now returns the sum of the squares of the imaginary part of the pilots
+- `imPilots` returns the sum of the squares of the imaginary part of the pilots
