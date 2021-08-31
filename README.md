@@ -27,7 +27,7 @@ The package `pyofdm` contains the module `codec` which contains the class `OFDM`
      On the receiver side the start of the symbol is detected by first doing a 
      coarse search with the cyclic prefix and then a precision alignment with the 
      pilots.
-     [en.wikipedia.org/wiki/OFDM](https://en.wikipedia.org/wiki/OFDM)
+     [en.wikipedia.org/wiki/Orthogonal_frequency-division_multiplexing](https://en.wikipedia.org/wiki/Orthogonal_frequency-division_multiplexing)
      
      nFreqSamples sets the number of frequency coefficients of the FFT. Pilot 
      tones are injected at pilotIndices. The real valued pilot amplitude is 
