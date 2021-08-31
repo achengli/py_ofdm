@@ -24,6 +24,19 @@ import numpy as np
 import scipy.signal
 import komm
 
+
+def setpilotindex(nData, mQAM, pilotspacing):
+    """
+    Returns an array of evenly spaced pilots which can then be used for pilotIndices 
+    in the OFDM constructor.
+    Paramaters nData and mQAM must match the OFDM constructor arguments.
+    """
+    kpilot = (4*nData//mQAM+pilotspacing//2)//(pilotspacing-1)
+    pilotindex = np.arange(pilotspacing//2,kpilot*pilotspacing+pilotspacing//2,pilotspacing,dtype=int)
+    pilotindex = np.concatenate((-1*np.flip(pilotindex),pilotindex))
+    return pilotindex
+
+
 class OFDM:
     """
     OFDM encoder and decoder. The data is encoded as QAM using the komm package. 

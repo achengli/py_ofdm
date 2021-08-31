@@ -79,7 +79,14 @@ the sine and cosine waves.
      Nyqist modulator which turns the complex valued base signal into a
      real valued sequence to be transmitted.
 
+## Periodic OFDM indices
 
+The module `codec` contains a function which generates evenly spaced pilots.
+Call the function with the same values for `nData` and `mQAM`:
+```
+setpilotindex(nData, mQAM, pilotspacing)
+```
+and choose the pilot spacing.
 
 ## Tx/Rx-Demo
 

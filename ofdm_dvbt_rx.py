@@ -21,7 +21,6 @@
 import numpy as np
 import scipy.io.wavfile as wav
 import matplotlib.pyplot as plt
-import pyofdm.setpilotindex
 import pyofdm.codec
 import pyofdm.nyquistmodem
 from PIL import Image
@@ -49,7 +48,7 @@ nbytes = sym_slots*QAMorder//8
 
 # Distance of the evenly spaced pilots
 distanceOfPilots = 12
-pilotlist = pyofdm.setpilotindex.setpilotindex(nbytes,QAMorder,distanceOfPilots)
+pilotlist = pyofdm.codec.setpilotindex(nbytes,QAMorder,distanceOfPilots)
 
 ofdm = pyofdm.codec.OFDM(pilotAmplitude = 16/9,
                          nData=nbytes,
