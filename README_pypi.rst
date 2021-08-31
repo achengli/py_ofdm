@@ -58,6 +58,14 @@ Constructor: `OFDM(nFreqSamples=64, pilotIndices=[-21, -7, 7, 21], pilotAmplitud
      Starts a decoding process. The signal is the real valued received
      signal and the decoding start at the index specified by offset.
 
+
+Periodic pilots
+---------------
+
+The module `codec` contains a function which generates evenly spaced pilots.
+Call the function with the same values for `nData` and `mQAM`::
+
+  setpilotindex(nData, mQAM, pilotspacing)
      
 
 Nyquist modulator and demodulator
@@ -68,11 +76,11 @@ and real valued signals. The modulation is at nyquist rate which means
 that its a quadrature modulator operating at a period of 4 samples for
 the sine and cosine waves.
      
-`nyquistdemod(self, base_signal)`
+`nyquistdemod(base_signal)`
      Nyqist demodulator which turns the received real valued signal into a
      complex valued sequence for the OFDM decoder.
      
-`nyquistmod(self, complex_signal)`
+`nyquistmod(complex_signal)`
      Nyqist modulator which turns the complex valued base signal into a
      real valued sequence to be transmitted.
 
