@@ -7,7 +7,7 @@ with open('README_pypi.rst') as f:
 
 setup(
     name='pyofdm',
-    version='2.0.1',
+    version='2.1',
     description="OFDM transmitter and receiver",
     long_description=long_description,
     author='Bernd Porr, David Hutchings',
