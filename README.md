@@ -14,6 +14,18 @@ Install the komm library:
 pip3 install komm
 ```
 
+## Installation
+
+### From the pypi repository:
+```
+pip install pyofdm
+```
+
+### Local install
+```
+python setup.py install [ -- user ]
+```
+
 ## OFDM class
 
 The package `pyofdm` contains the module `codec` which contains the class `OFDM`.
