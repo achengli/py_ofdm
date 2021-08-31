@@ -90,16 +90,17 @@ setpilotindex(nData, mQAM, pilotspacing)
 ```
 and choose the pilot spacing.
 
-## Tx/Rx-Demo
+## DVB-T Demo
 
 A grey value image is transmitted encoded as OFDM.
+
+Based on DVB-T 2k mode
+[www.etsi.org/deliver/etsi_en/300700_300799/300744/01.06.01_60/en_300744v010601p.pdf](https://www.etsi.org/deliver/etsi_en/300700_300799/300744/01.06.01_60/en_300744v010601p.pdf).
 
 ### Transmission demo
 
 `ofdm_dvbt_tx.py` reads in the pgm image 'DC4_300x200.pgm' and saves
 OFDM baseband to a WAV file 'ofdm44100.wav' You can listen to it!
-Based on DVB-T 2k mode
-[www.etsi.org/deliver/etsi_en/300700_300799/300744/01.06.01_60/en_300744v010601p.pdf](https://www.etsi.org/deliver/etsi_en/300700_300799/300744/01.06.01_60/en_300744v010601p.pdf)
 
 ### Reception demo
 
