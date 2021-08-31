@@ -36,13 +36,6 @@ The package `pyofdm` contains the module `codec` which contains the class `OFDM`
      power is normalised to unity. Default example correspond to 802.11a wifi 
      modulation.
      
-### `decode(self, randomSeed=1)`
-     Decodes one symbol and returns a byte array of the
-     data and the sum of the squares of the imaginary parts
-     of the pilot tones. The smaller that value the better
-     the symbol start detection, the reception and the jitter 
-     (theoretically zero at perfect reception).
-     
 ### `encode(self, data, randomSeed=1)`
      Creates an OFDM symbol using QAM. 
      The signal is a complex valued numpy array where the
@@ -51,6 +44,13 @@ The package `pyofdm` contains the module `codec` which contains the class `OFDM`
      The random seed sets the pseudo random number generator for the
      energy dispersal.
 
+### `decode(self, randomSeed=1)`
+     Decodes one symbol and returns a byte array of the
+     data and the sum of the squares of the imaginary parts
+     of the pilot tones. The smaller that value the better
+     the symbol start detection, the reception and the jitter 
+     (theoretically zero at perfect reception).
+     
 ### `findSymbolStartIndex(self, signal, searchrangecoarse=None, searchrangefine=25)`
      Finds the start of the symbol by 1st doing a cross correlation @nIFFT
      with the cyclic prefix and then it uses the pilot tones.
@@ -71,11 +71,11 @@ and real valued signals. The modulation is at nyquist rate which means
 that its a quadrature modulator operating at a period of 4 samples for
 the sine and cosine waves.
 	 
-### `demod(self, base_signal)`
+### `demod(base_signal)`
      Nyqist demodulator which turns the received real valued signal into a
      complex valued sequence for the OFDM decoder.
      
-### `mod(self, complex_signal)`
+### `mod(complex_signal)`
      Nyqist modulator which turns the complex valued base signal into a
      real valued sequence to be transmitted.
 
