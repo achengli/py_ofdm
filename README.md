@@ -27,7 +27,7 @@ The package `pyofdm` contains the module `codec` which contains the class `OFDM`
      On the receiver side the start of the symbol is detected by first doing a 
      coarse search with the cyclic prefix and then a precision alignment with the 
      pilots.
-     [en.wikipedia.org//wiki/OFDM]
+     [en.wikipedia.org/wiki/OFDM](https://en.wikipedia.org//wiki/OFDM)
      
      nFreqSamples sets the number of frequency coefficients of the FFT. Pilot 
      tones are injected at pilotIndices. The real valued pilot amplitude is 
@@ -98,7 +98,7 @@ A grey value image is transmitted encoded as OFDM.
 `ofdm_dvbt_tx.py` reads in the pgm image 'DC4_300x200.pgm' and saves
 OFDM baseband to a WAV file 'ofdm44100.wav' You can listen to it!
 Based on DVB-T 2k mode
-[www.etsi.org//deliver/etsi_en/300700_300799/300744/01.06.01_60/en_300744v010601p.pdf]
+[www.etsi.org/deliver/etsi_en/300700_300799/300744/01.06.01_60/en_300744v010601p.pdf](https://www.etsi.org/deliver/etsi_en/300700_300799/300744/01.06.01_60/en_300744v010601p.pdf)
 
 ### Reception demo
 
