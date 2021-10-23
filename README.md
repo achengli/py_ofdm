@@ -23,7 +23,7 @@ pip install pyofdm
 
 ### Local install
 ```
-python setup.py install [ -- user ]
+python setup.py install [ --user ]
 ```
 
 ## OFDM class
@@ -136,7 +136,7 @@ to input bytes.
 
 ## Features
 
-- QAM modulation and demodulation is performed using Roberto Nobrega komm library [pypi.org.project/komm](https://pypi.org.project/komm) which allows the modulation order to be extended to square modulations beyond QPSK/4QAM.
+- QAM modulation and demodulation is performed using [Roberto Nobrega's komm library](https://github.com/rwnobrega/komm/) which allows the modulation order to be extended to square modulations beyond QPSK/4QAM.
 
 - Pilots can be inserted at any user selected indices and not just regularly spaced. DC subcarrier is unmodulated by default.
 
