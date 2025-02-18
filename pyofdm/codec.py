@@ -191,7 +191,7 @@ class OFDM:
                 imPilots += np.imag(rx_freqs[k])**2 
                 ipilot+=1  
                 
-        rx_bin = self.qam.demodulate(rx_data)
+        rx_bin = self.qam.demodulate_hard(rx_data)
        
         # now let's assemble the bits into into bytes
         rx_byte = np.packbits(rx_bin)
