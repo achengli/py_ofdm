@@ -26,9 +26,9 @@ import pyofdm.nyquistmodem
 import matplotlib.pyplot as plt
 
 # load the image
-tx_im = Image.open('DC4_300x200.pgm')
+tx_im = Image.open("Gilbert Scott Building 098.pgm")
 Npixels = tx_im.size[0]*tx_im.size[1]
-tx_enc = np.array(tx_im, dtype="uint8").flatten()
+tx_enc = np.array(tx_im, dtype="uint8").ravel()
 
 # We do DVB-T 2k
 # https://www.etsi.org/deliver/etsi_en/300700_300799/300744/01.06.01_60/en_300744v010601p.pdf
@@ -56,27 +56,49 @@ ofdm = pyofdm.codec.OFDM(pilotAmplitude = 16/9,
                          nFreqSamples = totalFreqSamples)
 
 # add zeros to make data a whole number of symbols
-tx_enc = np.append(tx_enc,np.zeros((sym_slots-tx_enc.size)%sym_slots, dtype="uint8"))
+tx_enc = np.append(tx_enc,np.zeros(nbytes-tx_enc.size%nbytes, dtype="uint8"))
 
 complex_signal = np.array([ofdm.encode(tx_enc[i:i+nbytes]) for i in range(0,tx_enc.size,nbytes)])
 
-# Let's add some random length dummy zero data to the start of the signal
-complex_signal = np.concatenate((
-    np.zeros(np.random.randint(low=1*ofdm.nIFFT,high=2*ofdm.nIFFT),dtype=complex), 
-    complex_signal.ravel()))
+complex_signal = complex_signal.ravel()
 
-plt.title("OFDM complex spectrum")
-plt.xlabel("Normalised frequencies")
-plt.ylabel("Frequency amplitudes")
-plt.plot(np.linspace(0,1,len(complex_signal)),(1/len(complex_signal))*np.abs(np.fft.fft(complex_signal)))
-
-base_signal = pyofdm.nyquistmodem.mod(complex_signal)
-# save it as a wav file
-wav.write('ofdm44100.wav',44100,base_signal)
+rng1 = np.random.default_rng()
 
 plt.figure()
-plt.title("OFDM baseband spectrum after Nyquist modulation")
-plt.xlabel("Normalised frequencies")
-plt.ylabel("Frequency amplitudes")
-plt.plot(np.linspace(0,1,len(base_signal)),(1/len(base_signal))*np.abs(np.fft.fft(base_signal)))
+plt.title('OFDM output')
+plt.plot(complex_signal.real, label="real")
+plt.plot(complex_signal.imag, label="imag")
+plt.legend()
 plt.show()
+
+# plot single symbol spectrum with cyclic prefix removed
+# the spectrum is shifted so that the zero frequency component is at the centre 
+plt.figure()
+plt.title("single symbol OFDM complex spectrum")
+plt.xlabel("Normalised frequency")
+plt.ylabel("Signal amplitude")
+xlength = len(complex_signal)
+plt.plot(np.abs(np.roll(np.fft.fft(complex_signal[-totalFreqSamples:]),
+totalFreqSamples//2)/totalFreqSamples))
+plt.show()
+
+# Call Nyquist modulator. Note that number of samples is doubled, and output is real.
+base_signal = pyofdm.nyquistmodem.mod(complex_signal)
+
+# plot modulated signal spectrum (positive frequencies only)
+xlength = len(complex_signal)
+plt.figure()
+plt.title("OFDM spectrum after Nyquist modulation")
+plt.xlabel("Frequency/Nyquist frequency")
+plt.ylabel("Signal amplitude")
+plt.plot(np.linspace(0,2,xlength),1/xlength*np.abs(np.fft.fft(base_signal)[xlength:]))
+plt.show()
+
+# add some random length dummy data to the start of the signal here
+# for Nyquist modulator, make this a multiple of 4 to ensure carrier phase syncronisation
+# this example selects a length between 1/4 and 1 times the raw OFDM symbol
+npre = rng1.integers(low=totalFreqSamples//8,high=totalFreqSamples//2)*4
+base_signal = np.concatenate((np.zeros(npre),base_signal))
+
+# save it as a wav file
+wav.write('ofdm44100.wav',44100,base_signal)

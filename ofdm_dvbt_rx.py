@@ -26,10 +26,9 @@ import pyofdm.nyquistmodem
 from PIL import Image
 
 # expected image for size and ber determination
-tx_im = Image.open('DC4_300x200.pgm')
+tx_im = Image.open("Gilbert Scott Building 098.pgm")
 tx_byte = np.array(tx_im, dtype='uint8')
 Npixels = tx_im.size[1]*tx_im.size[0]
-
 
 # We do DVB-T 2k
 # https://www.etsi.org/deliver/etsi_en/300700_300799/300744/01.06.01_60/en_300744v010601p.pdf
@@ -58,6 +57,8 @@ ofdm = pyofdm.codec.OFDM(pilotAmplitude = 16/9,
 
 # OFDM reception as audio file
 samp_rate, base_signal = wav.read('ofdm44100.wav')
+# Number of expected OFDM symbols in signal
+sig_sym = (Npixels-1+nbytes)//nbytes
 # append extra zeros so that the search algorithm is happy
 base_signal = np.append(base_signal,np.zeros(ofdm.nIFFT*2))
 complex_signal = pyofdm.nyquistmodem.demod(base_signal)
@@ -83,10 +84,7 @@ plt.plot(np.arange(-searchRangeForPilotPeak,searchRangeForPilotPeak),sumofimag)
 print("Symbol start sample index =",offset)
 
 ofdm.initDecode(complex_signal,offset)
-sig_sym = (Npixels-1+nbytes)//nbytes
             
-rx_byte = np.empty(0, dtype='uint8')
-
 rx_byte = np.uint8([ofdm.decode()[0] for i in range(sig_sym)]).ravel()
 
 rx_im = rx_byte[0:Npixels].reshape(tx_im.size[1],tx_im.size[0])
@@ -95,7 +93,7 @@ plt.figure()
 plt.title("Decoded image")
 plt.imshow(rx_im, cmap='gray')
 
-tx_bin = np.unpackbits(tx_byte.flatten())
+tx_bin = np.unpackbits(tx_byte.ravel())
 rx_bin = np.unpackbits(rx_byte[0:Npixels])
 ber = (rx_bin ^ tx_bin).sum()/tx_bin.size
 print('ber= ', ber)
