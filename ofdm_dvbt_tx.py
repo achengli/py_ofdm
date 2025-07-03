@@ -69,7 +69,6 @@ plt.title('OFDM output')
 plt.plot(complex_signal.real, label="real")
 plt.plot(complex_signal.imag, label="imag")
 plt.legend()
-plt.show()
 
 # plot single symbol spectrum with cyclic prefix removed
 # the spectrum is shifted so that the zero frequency component is at the centre 
@@ -80,7 +79,6 @@ plt.ylabel("Signal amplitude")
 xlength = len(complex_signal)
 plt.plot(np.abs(np.roll(np.fft.fft(complex_signal[-totalFreqSamples:]),
 totalFreqSamples//2)/totalFreqSamples))
-plt.show()
 
 # Call Nyquist modulator. Note that number of samples is doubled, and output is real.
 base_signal = pyofdm.nyquistmodem.mod(complex_signal)
