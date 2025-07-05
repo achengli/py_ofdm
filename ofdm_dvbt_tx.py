@@ -93,10 +93,12 @@ plt.plot(np.linspace(0,2,xlength),1/xlength*np.abs(np.fft.fft(base_signal)[xleng
 plt.show()
 
 # add some random length dummy data to the start of the signal here
-# for Nyquist modulator, make this a multiple of 4 to ensure carrier phase syncronisation
+# this example copies data from the end of the modulated signal
 # this example selects a length between 1/4 and 1 times the raw OFDM symbol
+# for Nyquist modulator, make this a multiple of 4 to ensure carrier phase syncronisation
+
 npre = rng1.integers(low=totalFreqSamples//8,high=totalFreqSamples//2)*4
-base_signal = np.concatenate((np.zeros(npre),base_signal))
+base_signal = np.concatenate((base_signal[-npre:],base_signal))
 
 # save it as a wav file
 wav.write('ofdm44100.wav',44100,base_signal)
