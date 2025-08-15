@@ -23,7 +23,7 @@ OFDM transmitter and receiver with energy dispersal, pilot tones and cyclic pref
 import numpy as np
 import scipy.signal
 import komm
-
+from matplotlib import pyplot as plt
 
 def setpilotindex(nData, mQAM, pilotspacing):
     """
@@ -71,10 +71,10 @@ class OFDM:
 
         # indices of pilots	
         self.pilotIndices = np.array(pilotIndices)
-        
+
         # amplitudes of the pilot carrier at the beginning
         self.pilotAmplitude = pilotAmplitude
-        
+
         # mQAM bits per QAM symbol
         self.mQAM = mQAM
         # normalisation to make average bit energy unity for square QAM
@@ -82,16 +82,16 @@ class OFDM:
         for i in range(1,2**(mQAM//2),2):
             norm = norm + i**2
         self.norm = np.sqrt(norm*2**(2-mQAM//2))
-        
+
         # use komm open-source library for QAM mod/demod 
         # pypi.org/project/komm 
         # by Roberto W. Nobrega <rwnobrega@gmail.com>
         self.qam = komm.QAModulation(2**self.mQAM,base_amplitudes=1./self.norm)
-        
+
         self.kstart = (8*self.nData//self.mQAM+self.pilotIndices.size)//2
 
     def encode(self,data,randomSeed = 1):
-            
+
         """
         Creates an OFDM symbol using QAM. 
         The signal is a complex valued numpy array where the
@@ -242,3 +242,41 @@ class OFDM:
         # Correct it with the pilots
         o2 = o1 + np.argmin(imagpilots) - searchrangefine
         return crosscorr,imagpilots,o2
+
+    @staticmethod
+    def genQAMConstellation(M=2, asList=False):
+        """
+        Generates constellation of a M symbols QAM modulation. If asList
+        is set to True, the result will be returned as column vector with
+        concatenated columns of the resulting constellation matrix grid.
+        """
+        try:
+            assert(int(np.sqrt(M)) == np.sqrt(M))
+        except Exception:
+            print("OFDM.genQAMConstellation takes M as square number \
+                    { 4, 16, 64 ... }")
+
+        scale = np.matrix(np.linspace(-1/(np.sqrt(2)), 1/(np.sqrt(2)),
+                                      int(np.sqrt(M))))
+        constellation = np.flipud(scale + (1j * scale.T))
+        if asList:
+            return constellation.reshape(constellation.size, 1)
+        return constellation
+
+    def plotConstellation(self, color='b'):
+        """
+        Print grid constellation with cross scattered dots colorized with
+        color variable: See pyplot.plot color options
+        """
+        constellation = OFDM.genQAMConstellation(self.mQAM, asList=True)
+        plt.plot(np.real(constellation), np.imag(constellation), 'rx')
+
+        if self.signal:
+            real_signal = np.real(self.signal)
+            imag_signal = np.imag(self.signal)
+            plt.plot(real_signal, imag_signal, color + 'o')
+
+    @staticmethod
+    def showPlot():
+        plt.show()
+
